@@ -1,0 +1,85 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+android {
+    compileSdkVersion 28
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.rrz.demo"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: "com.rrz.demo",
+                JPUSH_APPKEY : "b79e9fbb2198dd16b92eff88", // NOTE: JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+                AMAP_KEY: "0d22157752d1ebfb3c200003a48e993d", /// 高德地图key
+        ]
+    }
+
+    //打包  更改当前签名
+    signingConfigs {
+        config {
+            storeFile file("rrzdemo.keystore")
+            storePassword "888888"
+            keyAlias "ycj"
+            keyPassword "888888"
+        }
+    }
+    buildTypes {
+        release {
+            ndk {
+                //选择要添加的对应 cpu 类型的 .so 库。
+                abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'
+//'armeabi', 'armeabi-v7a', 'x86', 'x86_64', 'mips', 'mips64', 'arm64-v8a'
+                // 还可以添加
+            }
+            minifyEnabled false   // 是否启用压缩
+            shrinkResources false    // 是否打包(无用)的资源 和 flutter build apk --no-shrink一样
+            zipAlignEnabled false   // 是否采用压缩对齐方式（暂时不懂）
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+            signingConfig signingConfigs.config //debug
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+dependencies {
+    /// 注意这里需要在主项目增加一条依赖，否则可能发生编译不通过的情况
+    implementation 'com.amap.api:location:latest.integration'
+}
