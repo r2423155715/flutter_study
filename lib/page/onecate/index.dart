@@ -1,3 +1,5 @@
+import 'package:demo/router/application.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -26,6 +28,7 @@ class _OneCatePageState extends State<OneCatePage> {
           child: Column(
             children: <Widget>[
               Container(
+                margin: EdgeInsets.only(top: 10, bottom: 10),
                 height: 200,
                 child: Swiper(
                   itemBuilder: (BuildContext context, int index) {
@@ -47,6 +50,40 @@ class _OneCatePageState extends State<OneCatePage> {
                   scale: 0.9,
                   autoplay: true,
                 ),
+              ),
+              Stack(
+                children: <Widget>[
+                  Center(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 40,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Image.network(
+                          'https://cdn.pixabay.com/photo/2017/04/28/16/29/landscape-2268775__340.jpg',
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: InkWell(
+                        onTap: () {
+                          Application.router.navigateTo(context, '/video1',transition: TransitionType.fadeIn);
+                        },
+                        child: Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                          size: 50,
+                        )),
+                  )
+                ],
               )
             ],
           ),

@@ -33,9 +33,9 @@ class _IndexPageState extends State<IndexPage> {
 
   void getpwoer() async {
     var status = await Permission.camera.status;
-   if(!status.isGranted){
-     Permission.camera.request();
-   }
+    if (!status.isGranted) {
+      Permission.camera.request();
+    }
   }
 
   @override
@@ -44,6 +44,18 @@ class _IndexPageState extends State<IndexPage> {
       home: Scaffold(
         body: list[index],
         floatingActionButton: FloatingActionButton(
+//          highlightElevation :
+//          (MediaQuery.of(context).viewInsets.bottom != 0 && index == 3)
+//              ? 0
+//              : 12.0,
+//          elevation:
+//              (MediaQuery.of(context).viewInsets.bottom != 0 && index == 3)
+//                  ? 0
+//                  : 6.0,
+          backgroundColor:Colors.blue,
+//              (MediaQuery.of(context).viewInsets.bottom != 0 && index == 3)
+//                  ? Colors.transparent
+//                  : Colors.blue,
           onPressed: () {
             setState(() {
               index = 2;
@@ -52,7 +64,10 @@ class _IndexPageState extends State<IndexPage> {
           tooltip: "new page",
           child: Icon(
             Icons.add,
-            color: Colors.white,
+            color:Colors.white
+//            (MediaQuery.of(context).viewInsets.bottom != 0 && index == 3)
+//                ? Colors.transparent
+//                : Colors.white,
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

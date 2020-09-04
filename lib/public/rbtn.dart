@@ -15,14 +15,14 @@ class Rbtn extends StatefulWidget {
   const Rbtn(
       {Key key,
       this.width,
-      this.height,
+      this.height:30,
       this.onTap,
-      this.radius,
-      this.color,
+      this.radius:20,
+      this.color:0xff0000ff,
       this.text,
-      this.textColor,
+      this.textColor:0xffffffff,
       this.fontsize,
-      this.needborder,
+      this.needborder:false,
       this.borderColor,})
       : super(key: key);
 

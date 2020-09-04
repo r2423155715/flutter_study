@@ -1,6 +1,8 @@
 import 'package:amap_location/amap_location.dart';
 import 'package:demo/page/lanch.dart';
 import 'package:demo/page/tabbar.dart';
+import 'package:demo/public/db/data_helper.dart';
+import 'package:demo/public/db/data_sqlite.dart';
 import 'package:demo/router/application.dart';
 import 'package:demo/router/routers.dart';
 import 'package:fluro/fluro.dart';
@@ -13,15 +15,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'config/providermodel.dart';
 import 'package:amap_map_fluttify/amap_map_fluttify.dart';
+
 final JPush jpush = new JPush();
 
-void main() async{
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => Counter2()),
-    ],
-    child: MyApp(),
-  ));
+void main() async {
+  runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => Counter2()),
+        ],
+        child: MyApp(),
+      )
+  );
+  await DatabaseSqliteHelper.getInstance().then((value) {
+//    print('数据库加载完===${value.getTables()}');
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -44,7 +52,6 @@ class _MyAppState extends State<MyApp> {
       print("rid=>" + value);
     });
     _getmsg();
-
   }
 
   // 接收通知回调方法。
