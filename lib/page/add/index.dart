@@ -14,6 +14,7 @@ class _AddPageState extends State<AddPage> {
   TextEditingController namecon = new TextEditingController();
   TextEditingController agecon = new TextEditingController();
   List<DataModel> allmsg = [];
+  int index1;
 
   @override
   void initState() {
@@ -56,19 +57,29 @@ class _AddPageState extends State<AddPage> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: Rbtn(
-                width: MediaQuery.of(context).size.width / 3,
-                height: 50,
-                color: 0xff0000ff,
-                text: '添加',
-                needborder: false,
-                onTap: () {
-//                  DataModel obj={
-//                    name:namecon.text,
-//                  age:agecon.text
-//                  };
-                  _add();
-                },
+              child: Row(
+                children: <Widget>[
+                  Rbtn(
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: 50,
+                    color: 0xff0000ff,
+                    text: '添加',
+                    needborder: false,
+                    onTap: () {
+                      _add();
+                    },
+                  ),
+                  Rbtn(
+                    width: MediaQuery.of(context).size.width / 3,
+                    height: 50,
+                    color: 0xff0000ff,
+                    text: '编辑',
+                    needborder: false,
+                    onTap: () {
+                      _edit(index1);
+                    },
+                  ),
+                ],
               ),
             ),
             ListView.builder(
@@ -102,12 +113,16 @@ class _AddPageState extends State<AddPage> {
                       ),
                       Positioned(
                         right: 20,
-                        top: 10,
+                        top: 0,
                         child: FlatButton(
                           color: Colors.red,
                           child: InkWell(
                             onTap: () {
-                              _edit(index);
+                              setState(() {
+                                index1 = index;
+                                namecon.text = allmsg[index].name;
+                                agecon.text = allmsg[index].age.toString();
+                              });
                             },
                             child: Text(
                               '编辑',
@@ -152,14 +167,23 @@ class _AddPageState extends State<AddPage> {
       }
     });
   }
-  _edit(index){
-    DataSqlite.instance.updateQuestionsOneParameter(allmsg[index].name, namecon.text, allmsg[index].age, int.parse(agecon.text)).then((value) {
-    if(value){
-      Fluttertoast.showToast(msg: '编辑成功');
-      
-    }else{
-      Fluttertoast.showToast(msg: '编辑失败');
-    }
+
+  _edit(index) {
+    DataSqlite.instance
+        .updateQuestionsOneParameter(allmsg[index].name, namecon.text,
+            allmsg[index].age, int.parse(agecon.text))
+        .then((value) {
+      if (value == 1) {
+        Fluttertoast.showToast(msg: '编辑成功');
+        setState(() {
+          allmsg[index].name = namecon.text;
+          allmsg[index].age = int.parse(agecon.text);
+          namecon.text = '';
+          agecon.text = '';
+        });
+      } else {
+        Fluttertoast.showToast(msg: '编辑失败');
+      }
     });
   }
 }

@@ -102,7 +102,7 @@ class DataSqlite {
 //
   //修改好友的某一条数据
   Future<dynamic>updateQuestionsOneParameter( String name,String name1,int age,int age1) async {
-    String sql = "update $tab_name set $name = ?,$age = ? where name =$name and age=$age";
+    String sql = "update $tab_name set name = ? , age = ? where name = '$name' and age = $age";
     var res = await DatabaseSqliteHelper.db.rawUpdate(sql, [name1,age1]);
     debugPrint("修改问题反馈某一条数据结果$tag：" + res.toString());
     return res;
